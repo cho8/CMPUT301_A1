@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello_habit">Enter new habit</string>
+    <string name="app_name">HabitTracker</string>
+    <string name="current_habits">Current Habits:</string>
+    <string name="save">Save</string>
+    <string name="newHabit">New Habit</string>
+    <string name="date_created">Date created:</string>
+    <string name="times_completed">Times Completed:  </string>
+    <string name="delete">Delete</string>
+    <string name="days_occur">Days habit occurs:</string>
+
+    <string name="no_habit">No habit entered</string>
+    <string name="no_days">No days entered</string>
+    <string name="habit_deleted">Habit deleted</string>
+    <string name="habit_complete">Habit completed</string>
+    <string name="habit_created">Habit created</string>
+
+</resources>

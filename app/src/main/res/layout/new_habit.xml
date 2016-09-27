@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/habitTextView"
+        android:layout_weight="0.81"
+        android:hint="@string/hello_habit"
+        android:gravity="start"/>
+
+    <TextView
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/days_occur"
+        android:id="@+id/textView"
+        android:layout_weight="0.05"
+        android:padding="10dp"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="245dp"
+            android:id="@+id/daysListView"
+            android:layout_gravity="center_vertical" />
+
+    <Button
+        android:layout_width="172dp"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/saveHabit"
+        android:layout_weight="0.18"
+        android:layout_gravity="end" />
+
+</LinearLayout>
