@@ -17,6 +17,9 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by cho8 on 2016-09-19.
+ */
 public class NewHabitActivity extends Activity {
 
     private EditText habitTextView;
@@ -82,8 +85,6 @@ public class NewHabitActivity extends Activity {
 
                 setResult(Activity.RESULT_OK, resultIntent);
                 finish();
-
-
 
                 // Returning to MainActivity referenced from here
                 // http://stackoverflow.com/questions/920306/sending-data-back-to-the-main-activity-in-android

@@ -13,12 +13,14 @@ public class Habit {
     private Date date;
     private Integer completes;
     private SparseBooleanArray days;
+    private Boolean dailyComplete;
 
     public Habit(String content) {
         this.content = content;
         this.date = new Date();
         this.completes = 0;
         this.days = new SparseBooleanArray();
+        this.dailyComplete=Boolean.FALSE;
 
     }
 
@@ -30,9 +32,17 @@ public class Habit {
         this.date = date;
     }
 
-    public void addCompleted() {
+    public void setCompletes(Integer completes) { this.completes = completes; }
+
+    public void addCompletes() {
         this.completes += 1;
     }
+
+    public Boolean getDailyComplete() {
+        return dailyComplete;
+    }
+
+    public void setDailyComplete(Boolean bool) { this.dailyComplete=bool; }
 
     public void setDays(SparseBooleanArray days) {
         this.days = days;
@@ -59,7 +69,7 @@ public class Habit {
     }
 
     public String toString() {
-        return dateString()+ " | " + content;
+        return content;
     }
 
     public String dateString() {

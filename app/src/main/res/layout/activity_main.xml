@@ -23,11 +23,25 @@
     </ListView>
 
 
-    <Button
-        android:id="@+id/newHabit"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/newHabit"
-        android:layout_weight="0.22" />
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Habit List"
+            android:id="@+id/habitList"
+            android:layout_weight="0.5"/>
+
+        <Button
+            android:id="@+id/newHabit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/newHabit"
+            android:layout_weight="0.5"/>
+    </LinearLayout>
 
 </LinearLayout>

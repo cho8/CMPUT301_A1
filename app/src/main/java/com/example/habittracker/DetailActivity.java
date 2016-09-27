@@ -16,6 +16,9 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by cho8 on 2016-09-19.
+ */
 
 public class DetailActivity extends Activity {
 
@@ -65,35 +68,41 @@ public class DetailActivity extends Activity {
                     R.layout.list_item,
                     daysArray);
             setDaysView.setAdapter(adapter);
+
+            // Make the button invisible for non-habit days
+            if (extras.getBoolean("viewOnly",Boolean.FALSE)==Boolean.TRUE) {
+                completeButton.setVisibility(View.GONE);
+            }
+
+            completeButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    Intent returnIntent = new Intent();
+
+
+                    returnIntent.putExtra("shouldIncr", Boolean.TRUE);
+                    returnIntent.putExtra("position", position);
+
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+            });
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View v) {
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("position", position);
+                    returnIntent.putExtra("shouldDelete", Boolean.TRUE);
+
+                    setResult(Activity.RESULT_OK, returnIntent);
+
+                    finish();
+                }
+            });
+
         }
-
-        completeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                Intent returnIntent = new Intent();
-
-
-                returnIntent.putExtra("shouldIncr", Boolean.TRUE);
-                returnIntent.putExtra("position", position);
-
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-        });
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("position", position);
-                returnIntent.putExtra("shouldDelete", Boolean.TRUE);
-
-                setResult(Activity.RESULT_OK, returnIntent);
-
-                finish();
-            }
-        });
 
 
 
