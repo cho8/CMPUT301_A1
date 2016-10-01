@@ -71,6 +71,7 @@ public class NewHabitActivity extends Activity {
         dayListView = (ListView) findViewById(R.id.daysListView);
         dateTextView = (EditText) findViewById(R.id.dateText);
         dateTextView.setFocusable(Boolean.FALSE);
+        dateTextView.setHint(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
         saveButton = (Button) findViewById(R.id.saveHabit);
 
@@ -152,14 +153,15 @@ public class NewHabitActivity extends Activity {
         Habit newHabit = new Habit(content);
         newHabit.setDays(daysChecked);
 
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date userDate;
         try {
-            Date userDate = sdf.parse(dateSet);
-            newHabit.setDate(userDate);
+            userDate = sdf.parse(dateSet);
+
         } catch (Exception e) {
-            throw new RuntimeException();
+            userDate = new Date();
         }
+        newHabit.setDate(userDate);
         habitList.addNewHabit(newHabit);
         saveInFile();
     }

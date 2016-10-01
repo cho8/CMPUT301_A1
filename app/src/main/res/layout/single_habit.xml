@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="match_parent"
         android:padding="10dp"
-        android:layout_height="74dp"
+        android:layout_height="55dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text=""
         android:id="@+id/ContentView">
@@ -56,34 +56,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="right"
-        android:weightSum="1"
-        android:layout_weight="0.03">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/times_completed"
-            android:layout_row="0"
-            android:layout_column="15"
-            android:layout_weight="0.10" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:padding="0dp"
-            android:id="@+id/nCompletes"
-            android:layout_row="0"
-            android:layout_column="16" />
-    </LinearLayout>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -93,7 +65,6 @@
         android:paddingLeft="10dp"/>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
@@ -102,19 +73,80 @@
         android:paddingLeft="10dp">
 
         <ListView
-            android:layout_width="168dp"
+            android:layout_width="119dp"
             android:layout_height="300dp"
             android:id="@+id/setDaysView"
-            android:choiceMode="none"
-            android:layout_weight="0.33" />
+            android:choiceMode="none" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="0.46">
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.33">
+            android:layout_weight="0.33"
+            android:weightSum="1">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:layout_weight="0.40">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/times_completed"
+                    android:layout_row="0"
+                    android:layout_column="15"
+                    android:layout_weight="0.10" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:padding="0dp"
+                    android:id="@+id/nCompletes"
+                    android:text="##"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
+
+            <ListView
+                android:layout_width="156dp"
+                android:layout_height="125dp"
+                android:id="@+id/pastCompletes"
+                android:layout_gravity="center_horizontal"
+                android:choiceMode="none" />
+
+            <Button
+                android:layout_width="157dp"
+                android:layout_height="58dp"
+                android:text="Delete Last Completion"
+                android:id="@+id/deletePast"
+                android:layout_gravity="right" />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/saveButton"
+            android:layout_weight="0.33" />
 
         <Button
             android:layout_width="wrap_content"
@@ -124,7 +156,6 @@
             android:layout_weight="0.33"
             android:layout_row="1"
             android:layout_column="14" />
-
     </LinearLayout>
 
 </LinearLayout>

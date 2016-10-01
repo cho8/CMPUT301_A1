@@ -43,12 +43,14 @@ public class DetailActivity extends Activity {
 
     private List<String> daysArray;
     private ListView setDaysView;
+    private ListView pastCompletesView;
     private TextView habitContentView;
     private TextView habitDateView;
     private TextView habitCompletesView;
 
     private SparseBooleanArray daysChecked;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> daysAdapter;
+    private ArrayAdapter<String> completesAdapter;
 
     private Habit habit;
     private HabitList habitList;
@@ -66,6 +68,7 @@ public class DetailActivity extends Activity {
         habitContentView = (TextView) findViewById(R.id.ContentView);
         habitDateView = (TextView) findViewById(R.id.DateView);
         habitCompletesView = (TextView) findViewById(R.id.nCompletes);
+        pastCompletesView = (ListView) findViewById(R.id.pastCompletes);
 
         habitDateView.setFocusable(Boolean.FALSE);
 
@@ -83,25 +86,14 @@ public class DetailActivity extends Activity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        habit.setDays(daysChecked);
-
-        habitList.updateHabit(position, habit);
-        saveInFile();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
 
         myCalendar = Calendar.getInstance();
 
-
         loadFromFile();
         habit = habitList.getHabit(position);
         daysChecked = habit.getDays();
-
 
         habitDateView.setText(habit.dateString());
         habitContentView.setText(habit.getContent());
@@ -116,19 +108,24 @@ public class DetailActivity extends Activity {
                 daysArray.add(days[i]);
             }
         }
-        adapter = new ArrayAdapter<>(
+        daysAdapter = new ArrayAdapter<>(
                 this,
                 R.layout.list_item,
                 daysArray);
-        setDaysView.setAdapter(adapter);
+        setDaysView.setAdapter(daysAdapter);
+
+        completesAdapter = new ArrayAdapter<>(
+                this,
+                R.layout.list_item,
+                habit.getPastCompletesStrings());
+        pastCompletesView.setAdapter(completesAdapter);
+
 
         Button completeButton = (Button) findViewById(R.id.completeHabit);
         Button deleteButton = (Button) findViewById(R.id.deleteHabit);
+        Button saveButton = (Button) findViewById(R.id.saveButton);
+        Button deletePastButton = (Button) findViewById(R.id.deletePast);
 
-        // Make completeButton invisible for non habit days
-        if (!habit.getDays().get(dayOfWeek-1, Boolean.FALSE)) {
-            completeButton.setVisibility(View.GONE);
-        }
         completeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -141,18 +138,50 @@ public class DetailActivity extends Activity {
             }
         });
 
+        deletePastButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent returnIntent = new Intent();
+
+                decrementCompletes(position);
+                completesAdapter.notifyDataSetChanged();
+                returnIntent.putExtra("decr", Boolean.TRUE);
+                setResult(Activity.RESULT_OK, returnIntent);
+//                finish();
+                pastCompletesView.invalidate();
+            }
+        });
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
 
-                deleteHabit(position);
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("delete", Boolean.TRUE);
 
+                habitList.removeHabit(position);
                 setResult(Activity.RESULT_OK, returnIntent);
+                saveInFile();
 
                 finish();
             }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("save", Boolean.TRUE);
+
+                setResult(Activity.RESULT_OK, returnIntent);
+                habit.setDays(daysChecked);
+
+                habitList.updateHabit(position, habit);
+                saveInFile();
+
+                finish();
+            }
+
         });
 
         habitDateView.setOnClickListener(new View.OnClickListener() {
@@ -167,11 +196,7 @@ public class DetailActivity extends Activity {
             }
         });
 
-    }
 
-    private void deleteHabit(int position) {
-        habitList.removeHabit(position);
-        adapter.notifyDataSetChanged();
 
     }
 
@@ -216,10 +241,21 @@ public class DetailActivity extends Activity {
         }
     }
 
-    private void incrementCompletes(int position) {
-        habitList.incrementCompletes(position);
+    private void decrementCompletes(int position) {
+        habit.subCompletes();
+        habitList.updateHabit(position, habit);
 
-        adapter.notifyDataSetChanged();
+        completesAdapter.notifyDataSetChanged();
+
+        saveInFile();
+    }
+
+    private void incrementCompletes(int position) {
+
+        habit.addCompletes();
+        habitList.updateHabit(position, habit);
+
+        completesAdapter.notifyDataSetChanged();
 
         saveInFile();
     }

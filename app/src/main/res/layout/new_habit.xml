@@ -16,14 +16,31 @@
         android:hint="@string/hello_habit"
         android:gravity="start"/>
 
-    <EditText
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="date"
-        android:hint="Enter Date"
-        android:ems="10"
-        android:id="@+id/dateText"
-        android:onClick="showDatePickerDialog" />
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.06">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Enter date:"
+            android:id="@+id/enterDate"
+            android:layout_weight="0.5"
+            android:gravity="end"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:hint="datehint"
+            android:ems="10"
+            android:id="@+id/dateText"
+            android:gravity="center" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="316dp"

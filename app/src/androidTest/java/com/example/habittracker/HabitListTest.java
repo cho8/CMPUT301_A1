@@ -76,7 +76,7 @@ public class HabitListTest extends ActivityInstrumentationTestCase2<MainHabitAct
         assertEquals(habitList.getHabit(0), b);
     }
 
-    public void updateHabit() {
+    public void testUpdateHabit() {
         HabitList habitList = new HabitList();
         Habit a = new Habit("Hello!");
         Habit b = new Habit("Hi?");
@@ -91,4 +91,6 @@ public class HabitListTest extends ActivityInstrumentationTestCase2<MainHabitAct
 
         assertEquals(habitList.getHabit(1),c);
     }
+
+
 }

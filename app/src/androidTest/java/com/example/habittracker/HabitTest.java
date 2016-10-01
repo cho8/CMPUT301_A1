@@ -29,5 +29,17 @@ public class HabitTest extends ActivityInstrumentationTestCase2<MainHabitActivit
 
         habit.addCompletes();
         assertTrue(habit.getCompletes()>0);
+        assertTrue(habit.getPastCompletes().size()>0);
     }
+
+    public void testSubCompletes() {
+        String content = "This is a test!";
+        Habit habit = new Habit(content);
+
+        habit.addCompletes();
+        assertTrue(habit.getCompletes()>0);
+        habit.subCompletes();
+        assertFalse(habit.getPastCompletes().size()>0);
+    }
+
 }

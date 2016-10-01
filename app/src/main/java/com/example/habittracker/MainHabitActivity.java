@@ -149,6 +149,10 @@ public class MainHabitActivity extends Activity implements AdapterView.OnItemCli
                     } else if (data.getBooleanExtra("incr", Boolean.FALSE) == Boolean.TRUE) {
 
                         showToast(R.string.habit_complete);
+                    } else if (data.getBooleanExtra("save", Boolean.FALSE) == Boolean.TRUE) {
+                        showToast(R.string.habit_saved);
+                    } else if (data.getBooleanExtra("decr", Boolean.FALSE) == Boolean.TRUE) {
+                        showToast(R.string.habit_decr);
                     }
 
                 }

@@ -59,11 +59,12 @@ public class ListHabitActivity extends Activity implements AdapterView.OnItemCli
         startActivityForResult(intent, MainHabitActivity.DetailActivityCode);
 
     }
-    protected void onStart() {
-        super.onStart();
+
+    protected void onResume() {
+        super.onResume();
         habitList = new HabitList();
         loadFromFile();
-        arrayAdapter = new ArrayAdapter<>(this,
+        arrayAdapter = new CustomItemAdapter(this,
                 R.layout.list_item, habitList.getHabitList());
         habitListView.setAdapter(arrayAdapter);
 

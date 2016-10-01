@@ -51,13 +51,4 @@ public class HabitList {
     public void updateHabit(int position, Habit habit) {
         habitList.set(position, habit);
     }
-
-    public void incrementCompletes(int position) {
-        Habit habit = habitList.get(position);
-        habit.addCompletes();
-
-        habitList.set(position, habit);
-
-
-    }
 }
