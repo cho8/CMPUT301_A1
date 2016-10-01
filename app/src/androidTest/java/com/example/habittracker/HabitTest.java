@@ -15,11 +15,12 @@ public class HabitTest extends ActivityInstrumentationTestCase2<MainHabitActivit
         String content = "This is a test!";
         Habit habit = new Habit(content);
         Date date = new Date();
+        habit.setDate(date);
 
         assertTrue(habit.getContent().equals("This is a test!"));
         assertTrue(habit.getDate().equals(date));
 
-        assertFalse(habit.getDailyComplete());
+        assertFalse(habit.getCompletes()>0);
     }
 
     public void testAddCompletes() {
@@ -28,6 +29,5 @@ public class HabitTest extends ActivityInstrumentationTestCase2<MainHabitActivit
 
         habit.addCompletes();
         assertTrue(habit.getCompletes()>0);
-
     }
 }

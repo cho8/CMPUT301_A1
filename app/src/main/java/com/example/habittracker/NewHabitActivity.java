@@ -56,7 +56,7 @@ public class NewHabitActivity extends Activity {
     private ArrayAdapter<String> adapter;
 
     private List<String> daysArray;
-    private ArrayList<Habit> habitList;
+    private HabitList habitList;
 
     private String content;
     private String dateSet;
@@ -74,6 +74,8 @@ public class NewHabitActivity extends Activity {
 
         saveButton = (Button) findViewById(R.id.saveHabit);
 
+        habitList = new HabitList();
+
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -90,7 +92,6 @@ public class NewHabitActivity extends Activity {
                     resultIntent.putExtra("requireDays", Boolean.TRUE);
 
                 } else {
-
 
                     addNewHabit();
                 }
@@ -159,10 +160,7 @@ public class NewHabitActivity extends Activity {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-
-
-
-        habitList.add(newHabit);
+        habitList.addNewHabit(newHabit);
         saveInFile();
     }
 
@@ -176,12 +174,12 @@ public class NewHabitActivity extends Activity {
 
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             Type listType = new TypeToken<ArrayList<Habit>>(){}.getType();
-
-            habitList = gson.fromJson(in,listType);
+            ArrayList<Habit> intermList = gson.fromJson(in,listType);
+            habitList.setHabitList(intermList);
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            habitList = new ArrayList<Habit>();
+            habitList.setHabitList(new ArrayList<Habit>());
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();
@@ -195,7 +193,7 @@ public class NewHabitActivity extends Activity {
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             Gson gson = new Gson();
-            gson.toJson(habitList, out);
+            gson.toJson(habitList.getHabitList(), out);
             out.flush();
 
             fos.close();
@@ -208,7 +206,7 @@ public class NewHabitActivity extends Activity {
         }
     }
 
-    // ugly date picker things
+    // date picker things
     // from http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
 
 

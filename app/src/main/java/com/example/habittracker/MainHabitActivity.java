@@ -1,28 +1,18 @@
 package com.example.habittracker;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,16 +34,14 @@ public class MainHabitActivity extends Activity implements AdapterView.OnItemCli
     private EditText bodyText;
     private ListView oldHabitsList;
 
-    private ArrayList<Habit> habitList = new ArrayList<Habit>();
-    private ArrayList<Habit> todaysList = new ArrayList<Habit>();
+    private HabitList habitList;
+    private ArrayList<Habit> todaysList;
 
     private ArrayAdapter<Habit> adapter;
 
     protected static final int NewHabitActivityCode = 1;
     protected static final int DetailActivityCode = 2;
     protected static final int ListActvityCode = 3;
-
-    private Calendar calendar = Calendar.getInstance();
 
     /** Called when the activity is first created. */
     @Override
@@ -65,6 +53,8 @@ public class MainHabitActivity extends Activity implements AdapterView.OnItemCli
 
         Button newButton = (Button) findViewById(R.id.newHabit);
         Button listButton = (Button) findViewById(R.id.habitList);
+
+        habitList = new HabitList();
 
         newButton.setOnClickListener(new View.OnClickListener() {
 
@@ -99,7 +89,7 @@ public class MainHabitActivity extends Activity implements AdapterView.OnItemCli
         // TODO Auto-generated method stub
         super.onStart();
         loadFromFile();
-        updateTodaysList();
+        todaysList = habitList.updateTodaysList();
 
         adapter = new CustomItemAdapter(this,
                 R.layout.list_item, todaysList);
@@ -110,13 +100,14 @@ public class MainHabitActivity extends Activity implements AdapterView.OnItemCli
     protected void onResume() {
         super.onResume();
         loadFromFile();
+        todaysList = habitList.updateTodaysList();
         adapter.notifyDataSetChanged();
     }
 
     public void onItemClick(AdapterView<?> habitView, View v, int position, long id) {
 
         Gson gson = new Gson();
-        Habit habit = habitList.get(position);
+        Habit habit = habitList.getHabit(position);
         Intent intent = new Intent();
         intent.setClass(this, DetailActivity.class);
 
@@ -168,19 +159,6 @@ public class MainHabitActivity extends Activity implements AdapterView.OnItemCli
 
 
 
-
-
-    protected void updateTodaysList() {
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-        todaysList.clear();
-        for (Habit h : habitList) {
-            if (h.getDays().get(day-1, Boolean.FALSE)==Boolean.TRUE) {
-                todaysList.add(h);
-            }
-        }
-
-    }
-
     private void showToast(int resourceStringID) {
         Context context = getApplicationContext();
         CharSequence text = context.getResources().getString(resourceStringID);
@@ -189,7 +167,7 @@ public class MainHabitActivity extends Activity implements AdapterView.OnItemCli
         toast.show();
     }
 
-    protected void loadFromFile() {
+    private void loadFromFile() {
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
@@ -198,37 +176,15 @@ public class MainHabitActivity extends Activity implements AdapterView.OnItemCli
 
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             Type listType = new TypeToken<ArrayList<Habit>>(){}.getType();
-
-            habitList = gson.fromJson(in,listType);
+            ArrayList<Habit> intermList = gson.fromJson(in,listType);
+            habitList.setHabitList(intermList);
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            habitList = new ArrayList<Habit>();
+            habitList.setHabitList(new ArrayList<Habit>());
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();
         }
     }
-
-    private void saveInFile() {
-        try {
-            FileOutputStream fos = openFileOutput(FILENAME,
-                    0);
-
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-
-            Gson gson = new Gson();
-            gson.toJson(habitList, out);
-            out.flush();
-
-            fos.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            throw new RuntimeException();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            throw new RuntimeException();
-        }
-    }
-
 }

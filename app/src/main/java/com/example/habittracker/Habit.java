@@ -13,7 +13,6 @@ public class Habit {
     private Date date;
     private Integer completes;
     private SparseBooleanArray days;
-    private Boolean dailyComplete;
 
     public Habit(String content) {
         this.content = content;

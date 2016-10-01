@@ -28,7 +28,7 @@ public class ListHabitActivity extends Activity implements AdapterView.OnItemCli
 
     private ListView habitListView;
     private ArrayAdapter<Habit> arrayAdapter;
-    private ArrayList<Habit> habitList;
+    private HabitList habitList;
 
     private int position;
 
@@ -43,7 +43,7 @@ public class ListHabitActivity extends Activity implements AdapterView.OnItemCli
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            position = extras.getInt("postion");
+            position = extras.getInt("position");
         }
 
         habitListView.setOnItemClickListener(this);
@@ -51,8 +51,6 @@ public class ListHabitActivity extends Activity implements AdapterView.OnItemCli
 
     public void onItemClick(AdapterView<?> habitView, View v, int position, long id) {
 
-        Gson gson = new Gson();
-        Habit habit = habitList.get(position);
         Intent intent = new Intent();
         intent.setClass(this, DetailActivity.class);
 
@@ -63,9 +61,10 @@ public class ListHabitActivity extends Activity implements AdapterView.OnItemCli
     }
     protected void onStart() {
         super.onStart();
+        habitList = new HabitList();
         loadFromFile();
-        arrayAdapter = new ArrayAdapter<Habit>(this,
-                R.layout.list_item, habitList);
+        arrayAdapter = new ArrayAdapter<>(this,
+                R.layout.list_item, habitList.getHabitList());
         habitListView.setAdapter(arrayAdapter);
 
     }
@@ -84,12 +83,12 @@ public class ListHabitActivity extends Activity implements AdapterView.OnItemCli
 
             // Code from http://stackoverflow.com/questions/12384064/gson-convert-from-json-to-a-typed-arraylistt
             Type listType = new TypeToken<ArrayList<Habit>>(){}.getType();
-
-            habitList = gson.fromJson(in,listType);
+            ArrayList<Habit> intermList = gson.fromJson(in,listType);
+            habitList.setHabitList(intermList);
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            habitList = new ArrayList<Habit>();
+            habitList.setHabitList(new ArrayList<Habit>());
         } catch (IOException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();
@@ -98,13 +97,12 @@ public class ListHabitActivity extends Activity implements AdapterView.OnItemCli
 
     private void saveInFile() {
         try {
-            FileOutputStream fos = openFileOutput(FILENAME,
-                    0);
+            FileOutputStream fos = openFileOutput(FILENAME, 0);
 
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
             Gson gson = new Gson();
-            gson.toJson(habitList, out);
+            gson.toJson(habitList.getHabitList(), out);
             out.flush();
 
             fos.close();
@@ -116,4 +114,5 @@ public class ListHabitActivity extends Activity implements AdapterView.OnItemCli
             throw new RuntimeException();
         }
     }
+
 }
