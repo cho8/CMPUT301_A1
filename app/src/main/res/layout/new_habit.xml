@@ -16,6 +16,15 @@
         android:hint="@string/hello_habit"
         android:gravity="start"/>
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:hint="Enter Date"
+        android:ems="10"
+        android:id="@+id/dateText"
+        android:onClick="showDatePickerDialog" />
+
     <TextView
         android:layout_width="316dp"
         android:layout_height="wrap_content"

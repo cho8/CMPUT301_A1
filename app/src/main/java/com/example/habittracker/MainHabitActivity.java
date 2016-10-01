@@ -1,6 +1,5 @@
 package com.example.habittracker;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -39,7 +38,7 @@ import com.google.gson.reflect.TypeToken;
  * Created by cho8 on 2016-09-19.
  */
 
-public class MainActivity extends Activity implements AdapterView.OnItemClickListener{
+public class MainHabitActivity extends Activity implements AdapterView.OnItemClickListener{
 
     private static final String FILENAME = "file.sav";
     private EditText bodyText;
@@ -86,9 +85,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
                 Intent intent = new Intent();
 
-                Gson gson = new Gson();
-                String serialList = gson.toJson(habitList);
-                intent.putExtra("habitList", serialList);
                 intent.setClass(getApplicationContext(),ListHabitActivity.class);
 
                 startActivityForResult(intent,ListActvityCode);
@@ -103,13 +99,18 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         // TODO Auto-generated method stub
         super.onStart();
         loadFromFile();
+        updateTodaysList();
+
         adapter = new CustomItemAdapter(this,
                 R.layout.list_item, todaysList);
         oldHabitsList.setAdapter(adapter);
+    }
 
-
-//        resetHabitDaily();
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFromFile();
+        adapter.notifyDataSetChanged();
     }
 
     public void onItemClick(AdapterView<?> habitView, View v, int position, long id) {
@@ -120,7 +121,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         intent.setClass(this, DetailActivity.class);
 
         intent.putExtra("position", position);
-        intent.putExtra("habit", gson.toJson(habit));
 
         startActivityForResult(intent,DetailActivityCode);
 
@@ -140,14 +140,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                     } else if (data.getBooleanExtra("requireDays",Boolean.FALSE) == Boolean.TRUE) {
                         showToast(R.string.no_days);
                     } else {
-
-                        String content = data.getStringExtra("content");
-                        Gson gson = new Gson();
-                        String daysString = data.getStringExtra("days");
-                        SparseBooleanArray daysBoolean = gson.fromJson(daysString, SparseBooleanArray.class);
-
-
-                        addNewHabit(content, daysBoolean);
                         showToast(R.string.habit_created);
                     }
 
@@ -159,13 +151,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 if (resultCode == Activity.RESULT_OK) {
 
                     Integer position = data.getIntExtra("position", -1);
-                    if (data.getBooleanExtra("shouldDelete", Boolean.FALSE) == Boolean.TRUE) {
+                    if (data.getBooleanExtra("delete", Boolean.FALSE) == Boolean.TRUE) {
 
-                        deleteHabit(position);
                         showToast(R.string.habit_deleted);
 
-                    } else if (data.getBooleanExtra("shouldIncr", Boolean.FALSE) == Boolean.TRUE) {
-                        incrementCompletes(position);
+                    } else if (data.getBooleanExtra("incr", Boolean.FALSE) == Boolean.TRUE) {
 
                         showToast(R.string.habit_complete);
                     }
@@ -173,48 +163,14 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 }
                 break;
             }
-
-            case(ListActvityCode) : {
-                if (resultCode == Activity.RESULT_OK) {
-
-                }
-                break;
-            }
         }
     }
 
-    private void addNewHabit(String content, SparseBooleanArray daysBoolean) {
-        Habit newHabit = new Habit(content);
-        newHabit.setDays(daysBoolean);
 
-        habitList.add(newHabit);
-        updateTodaysList();
-        adapter.notifyDataSetChanged();
 
-        saveInFile();
-    }
 
-    private void deleteHabit(int position) {
-        habitList.remove(position);
-        updateTodaysList();
-        adapter.notifyDataSetChanged();
 
-        saveInFile();
-    }
-
-    private void incrementCompletes(int position) {
-        Habit habit = habitList.get(position);
-        habit.addCompletes();
-        habit.setDailyComplete(Boolean.TRUE);
-
-        habitList.set(position, habit);
-
-        adapter.notifyDataSetChanged();
-
-        saveInFile();
-    }
-
-    private void updateTodaysList() {
+    protected void updateTodaysList() {
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         todaysList.clear();
         for (Habit h : habitList) {
@@ -225,31 +181,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
     }
 
-
-    private void resetHabitDaily() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if (prefs.getBoolean("firstLaunch", true))
-        {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean("firstLaunch", false);
-            editor.putInt("date", new Date().getDay());
-            editor.commit();
-        }
-        else
-        {
-            if (new Date().getTime() != prefs.getInt("date", 0))
-            {
-                for (Habit h : habitList) {
-                    h.setDailyComplete(Boolean.FALSE);
-                }
-                updateTodaysList();
-            }
-        }
-        adapter.notifyDataSetChanged();
-        saveInFile();
-    }
-
     private void showToast(int resourceStringID) {
         Context context = getApplicationContext();
         CharSequence text = context.getResources().getString(resourceStringID);
@@ -258,7 +189,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         toast.show();
     }
 
-    private void loadFromFile() {
+    protected void loadFromFile() {
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
@@ -269,7 +200,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
             Type listType = new TypeToken<ArrayList<Habit>>(){}.getType();
 
             habitList = gson.fromJson(in,listType);
-            updateTodaysList();
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ import java.util.List;
 // http://stackoverflow.com/questions/8166497/custom-adapter-for-list-view
 public class CustomItemAdapter extends ArrayAdapter{
 
-    private Calendar calendar = Calendar.getInstance();
+    private int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 
     public CustomItemAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
@@ -34,7 +35,6 @@ public class CustomItemAdapter extends ArrayAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
         View v = convertView;
 
         if (v == null) {
@@ -49,7 +49,7 @@ public class CustomItemAdapter extends ArrayAdapter{
             TextView tt1 = (TextView) v.findViewById(R.id.listItemText);
             tt1.setText(p.getContent());
 
-            if (p.getDailyComplete()==Boolean.TRUE) {
+            if (p.getDays().get(dayOfWeek-1, Boolean.FALSE) && p.getCompletes()>0) {
                 tt1.setPaintFlags(tt1.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 tt1.setTextColor(Color.parseColor("#646464"));
             }
