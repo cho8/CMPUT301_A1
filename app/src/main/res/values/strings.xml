@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello_habit">Enter new habit</string>
-    <string name="app_name">HabitTracker</string>
+    <string name="app_name">cho8-HabitTracker</string>
     <string name="current_habits">Today\'s Habits:</string>
     <string name="all_habits">All Habits:</string>
     <string name="save">Save</string>
