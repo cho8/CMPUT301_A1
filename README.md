@@ -1,8 +1,10 @@
 # CMPUT 301 Assignment 1
 ## Habit tracker
-### Description taken from the assignment page:
 
-Problem Description
+## Problem Description
+Description taken from the assignment page:
+
+
 
 A simple, attractive, and easy-to-use daily habit-tracker/habit-trainer/todo-log Android app, which maintains a list of recurring daily todo-tasks or habits that a user wants to complete each day.
 
