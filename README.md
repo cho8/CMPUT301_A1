@@ -1,7 +1,9 @@
-# CMPUT 301 Assignment 1
-## Habit tracker
+# CMPUT 301 
+# Fall 2016 University of Alberta
+### Assignment 1 Habit tracker
 
-## Problem Description
+
+### Problem Description
 Description taken from the assignment page:
 
 
